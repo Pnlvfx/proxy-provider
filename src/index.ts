@@ -62,6 +62,8 @@ const proxyProvider = {
     }
     throw new Error('No proxy found with this options');
   },
+  /** Debugonly */
+  testProxy,
   // implement store proxy and get stored proxy
 };
 
