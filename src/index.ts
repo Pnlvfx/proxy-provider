@@ -17,7 +17,9 @@ const getProxyList = (source: Source) => {
 };
 
 const proxyProvider = {
+  /** Get a list of free proxies from the specified source. You can use the Source enum to see all the available sources. */
   getProxyList,
+  /** Get a single free proxy. */
   getProxy: async ({ protocol, country }: ProxyOptions = {}) => {
     for (const [_i, provider] of Object.entries(Source)) {
       let proxies = await getProxyList(provider);

@@ -19,8 +19,16 @@ export const getHimeMeProxyList = async () => {
       const ip = cleanProxy.at(0)?.trim();
       const port = cleanProxy.at(1)?.trim();
       const country = cleanProxy.at(2)?.trim();
-      if (ip && port && protocol) {
-        proxyList.push({ ip, port, protocols: [protocol], sourceSite: Source.HIDEMEIP, anonymityLevel: AnonymityLevel.unknown, country });
+      if (ip && port) {
+        proxyList.push({
+          url: `${protocol}://${ip}:${port}`,
+          ip,
+          port,
+          protocols: [protocol],
+          sourceSite: Source.HIDEMEIP,
+          anonymityLevel: AnonymityLevel.unknown,
+          country,
+        });
       }
     });
     break;

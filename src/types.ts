@@ -14,6 +14,7 @@ export enum AnonymityLevel {
 }
 
 export type Proxy = {
+  url: string;
   ip: string;
   port: string;
   protocols: Protocol[];
