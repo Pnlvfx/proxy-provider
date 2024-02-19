@@ -1,16 +1,26 @@
 import coraline from 'coraline';
 import { AnonymityLevel, Protocol, Proxy, Source } from '../types.js';
+import { ProxyListOptions } from '../provider.js';
 
-export const proxyUrls = [
+const proxyUrls = [
   { url: 'https://raw.githubusercontent.com/zloi-user/hideip.me/main/http.txt', protocol: Protocol.http },
   { url: 'https://raw.githubusercontent.com/zloi-user/hideip.me/main/https.txt', protocol: Protocol.https },
   { url: 'https://raw.githubusercontent.com/zloi-user/hideip.me/main/socks4.txt', protocol: Protocol.socks4 },
   { url: 'https://raw.githubusercontent.com/zloi-user/hideip.me/main/socks5.txt', protocol: Protocol.socks5 },
 ];
 
-export const getHideMeProxyList = async () => {
+const getUrls = (protocol?: Protocol | Protocol[]) => {
+  if (protocol) {
+    return Array.isArray(protocol) ? proxyUrls.filter((a) => protocol.includes(a.protocol)) : proxyUrls.filter((a) => a.protocol === protocol);
+  } else {
+    return proxyUrls;
+  }
+};
+
+export const getHideMeProxyList = async ({ protocol }: ProxyListOptions = {}) => {
+  const urls = getUrls(protocol);
   const proxyList: Proxy[] = [];
-  for (const { url, protocol } of proxyUrls) {
+  for (const { url, protocol } of urls) {
     const res = await fetch(url, { method: 'GET', headers: { 'User-Agent': coraline.getUserAgent() } });
     const txt = await res.text();
     const proxies = txt.split('\n');
