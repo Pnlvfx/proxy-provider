@@ -16,19 +16,24 @@ const getProxyList = (source: Source) => {
   throw new Error('Please provide a valid source');
 };
 
-const proxy = {
+const proxyProvider = {
   getProxyList,
   getProxy: async ({ protocol, country }: ProxyOptions = {}) => {
     for (const [_i, provider] of Object.entries(Source)) {
-      const proxies = await getProxyList(provider);
-      const _proxy = proxies.find((pp) => pp.protocols.at(0) === protocol && pp.country === country);
-      if (_proxy) return _proxy;
+      let proxies = await getProxyList(provider);
+      if (protocol) {
+        proxies = proxies.filter((pp) => pp.protocols.includes(protocol));
+      }
+      if (country) {
+        proxies = proxies.filter((pp) => pp.country === country);
+      }
+      if (proxies[0]) return proxies[0];
     }
     throw new Error('No proxy found with this options');
   },
   // implement store proxy and get stored proxy
 };
 
-export default proxy;
+export default proxyProvider;
 
 export { AnonymityLevel, Protocol, Proxy, ProxyList, Source } from './types.js';
