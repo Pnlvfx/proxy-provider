@@ -8,7 +8,7 @@ export const proxyUrls = [
   { url: 'https://raw.githubusercontent.com/zloi-user/hideip.me/main/socks5.txt', protocol: Protocol.socks5 },
 ];
 
-export const getHimeMeProxyList = async () => {
+export const getHideMeProxyList = async () => {
   const proxyList: Proxy[] = [];
   for (const { url, protocol } of proxyUrls) {
     const res = await fetch(url, { method: 'GET', headers: { 'User-Agent': coraline.getUserAgent() } });
