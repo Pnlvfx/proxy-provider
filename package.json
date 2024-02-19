@@ -1,5 +1,5 @@
 {
-  "name": "proxy-list",
+  "name": "proxy-provider",
   "description": "Free proxy api.",
   "version": "2024.2.19",
   "main": "./dist/esm/index.js",
