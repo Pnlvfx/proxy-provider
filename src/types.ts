@@ -34,4 +34,5 @@ export type ProxyList = { dateTime: number; list: Proxy[] };
 
 export enum Source {
   HIDEMEIP = 'hideip.me',
+  CHECKERPROXY = 'checkerproxy.net',
 }
