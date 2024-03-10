@@ -1,10 +1,10 @@
 import coraline, { consoleColor } from 'coraline';
-import { ProxyOptions, getProxyList } from './provider.js';
+import { type ProxyOptions, getProxyList } from './provider.js';
 import { Source } from './types.js';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import https from 'node:https';
 
-export const testProxy = (proxyUrl: string) => {
+const testProxy = (proxyUrl: string) => {
   return new Promise<string>((resolve, reject) => {
     const agent = new HttpsProxyAgent(proxyUrl);
     const req = https.get('https://api.ipify.org?format=json', { agent }, (res) => {
@@ -51,9 +51,19 @@ const getNewProxy = async ({ protocol, country }: ProxyOptions = {}) => {
   throw new Error('No proxy found with this options');
 };
 
-export const getProxy = async ({ protocol, country, reset }: ProxyOptions & { reset?: boolean }) => {
-  if (reset) {
-    await coraline.cache.clear('proxy');
-  }
-  return coraline.cache.use('proxy', () => getNewProxy({ protocol, country }), { store: true });
+export const getProxy = ({ protocol, country }: ProxyOptions) => {
+  return new Promise((resolve) => {
+    const handle = async () => {
+      const data = await coraline.cache.use('proxy', () => getNewProxy({ protocol, country }), { store: true });
+      try {
+        await testProxy(data.url);
+        resolve(data);
+      } catch (err) {
+        coraline.log(err);
+        await coraline.cache.clear('proxy');
+        await handle();
+      }
+    };
+    handle();
+  });
 };
