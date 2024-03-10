@@ -1,6 +1,6 @@
 import coraline, { consoleColor } from 'coraline';
 import { type ProxyOptions, getProxyList } from './provider.js';
-import { Source } from './types.js';
+import { type Proxy, Source } from './types.js';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import https from 'node:https';
 
@@ -52,7 +52,7 @@ const getNewProxy = async ({ protocol, country }: ProxyOptions = {}) => {
 };
 
 export const getProxy = ({ protocol, country }: ProxyOptions) => {
-  return new Promise((resolve) => {
+  return new Promise<Proxy>((resolve) => {
     const handle = async () => {
       const data = await coraline.cache.use('proxy', () => getNewProxy({ protocol, country }), { store: true });
       try {
