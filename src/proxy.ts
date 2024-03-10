@@ -1,6 +1,6 @@
 import coraline, { consoleColor } from 'coraline';
 import { type ProxyOptions, getProxyList } from './provider.js';
-import { type Proxy, Source } from './types.js';
+import { Source } from './types.js';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import https from 'node:https';
 
@@ -51,19 +51,14 @@ const getNewProxy = async ({ protocol, country }: ProxyOptions = {}) => {
   throw new Error('No proxy found with this options');
 };
 
-export const getProxy = ({ protocol, country }: ProxyOptions) => {
-  return new Promise<Proxy>((resolve) => {
-    const handle = async () => {
-      const data = await coraline.cache.use('proxy', () => getNewProxy({ protocol, country }), { store: true });
-      try {
-        await testProxy(data.url);
-        resolve(data);
-      } catch (err) {
-        coraline.log(err);
-        await coraline.cache.clear('proxy');
-        await handle();
-      }
-    };
-    handle();
-  });
+export const getProxy = async ({ protocol, country }: ProxyOptions) => {
+  const data = await coraline.cache.use('proxy', () => getNewProxy({ protocol, country }), { store: true });
+  try {
+    await testProxy(data.url);
+    return data;
+  } catch {
+    consoleColor('red', `The stored proxy is no more valid, gettin a new one...`);
+    await coraline.cache.clear('proxy');
+    return coraline.cache.use('proxy', () => getNewProxy({ protocol, country }), { store: true });
+  }
 };
