@@ -14,6 +14,7 @@ export enum AnonymityLevel {
 }
 
 export type Proxy = {
+  isWorking: () => Promise<boolean>;
   url: string;
   ip: string;
   port: string;

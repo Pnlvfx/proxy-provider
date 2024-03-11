@@ -51,6 +51,15 @@ const getNewProxy = async ({ protocol, country }: ProxyOptions = {}) => {
   throw new Error('No proxy found with this options');
 };
 
+export const isWorking = async (proxyUrl: string) => {
+  try {
+    await testProxy(proxyUrl);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 export const getProxy = async ({ protocol, country }: ProxyOptions) => {
   const data = await coraline.cache.use('proxy', () => getNewProxy({ protocol, country }), { store: true });
   try {

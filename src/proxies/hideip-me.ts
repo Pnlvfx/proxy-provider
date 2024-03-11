@@ -1,6 +1,7 @@
 import type { ProxyListOptions } from '../provider.js';
 import coraline from 'coraline';
 import { AnonymityLevel, Protocol, Proxy, Source } from '../types.js';
+import { isWorking } from '../proxy.js';
 
 const proxyUrls = [
   { url: 'https://raw.githubusercontent.com/zloi-user/hideip.me/main/http.txt', protocol: Protocol.http },
@@ -31,8 +32,10 @@ export const getHideMeProxyList = async ({ protocol }: ProxyListOptions = {}) =>
       const port = cleanProxy.at(1)?.trim();
       const country = cleanProxy.at(2)?.trim();
       if (ip && port) {
+        const url = `${protocol}://${ip}:${port}`;
         proxyList.push({
-          url: `${protocol}://${ip}:${port}`,
+          isWorking: () => isWorking(url),
+          url,
           ip,
           port,
           protocols: [protocol],

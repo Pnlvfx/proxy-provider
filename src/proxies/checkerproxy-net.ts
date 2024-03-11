@@ -1,4 +1,5 @@
 import type { ProxyListOptions } from '../provider.js';
+import { isWorking } from '../proxy.js';
 import { AnonymityLevel, Protocol, Proxy, Source } from '../types.js';
 
 type ProxyCheckerPN = {
@@ -56,8 +57,10 @@ export const getCheckerProxyNexProxyList = async ({ protocol }: ProxyListOptions
         if (!protocol.includes(proxyProtocol)) continue;
       } else if (protocol !== proxyProtocol) continue;
     }
+    const url = `${proxyProtocol}://${ip}:${port}`;
     proxyList.push({
-      url: `${proxyProtocol}://${ip}:${port}`,
+      isWorking: () => isWorking(url),
+      url,
       ip,
       port,
       protocols,
