@@ -2,11 +2,6 @@ import { getCheckerProxyNexProxyList } from './proxies/checkerproxy-net.js';
 import { getHideMeProxyList } from './proxies/hideip-me.js';
 import { Protocol, Source } from './types.js';
 
-export interface ProxyOptions {
-  protocol?: Protocol;
-  country?: string;
-}
-
 export interface ProxyListOptions {
   protocol?: Protocol | Protocol[];
 }

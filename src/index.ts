@@ -14,4 +14,5 @@ const proxyProvider = {
 export default proxyProvider;
 
 export { AnonymityLevel, Protocol, Proxy, ProxyList, Source } from './types.js';
-export type { ProxyListOptions, ProxyOptions } from './provider.js';
+export type { ProxyListOptions } from './provider.js';
+export type { ProxyOptions } from './proxy.js';
