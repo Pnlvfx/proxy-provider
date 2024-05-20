@@ -65,7 +65,7 @@ export const isWorking = async (proxyUrl: string) => {
   }
 };
 
-export const getProxy = async ({ protocol, country }: ProxyOptions) => {
+export const getProxy = async ({ protocol, country }: ProxyOptions = {}) => {
   const data = await coraline.cache.use('proxy', () => getNewProxy({ protocol, country }), { store: true });
   try {
     await testProxy(data.url);
