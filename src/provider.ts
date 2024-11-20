@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import coraline, { errToString } from 'coraline';
 import { getProxyList } from './list.js';
 import { Proxy } from './types.js';
@@ -16,9 +17,10 @@ export interface ProxyOptions {
   debug?: boolean;
 }
 
-export const proxyProvider = async (directory: string, { country, protocol, testUrl, debug }: ProxyOptions = {}) => {
-  const cache = coraline.cache(directory);
+export const proxyProvider = async (coraPath: string, { country, protocol, testUrl, debug }: ProxyOptions = {}) => {
+  const directory = path.join(coraPath, '.proxy');
   const skipFile = path.join(directory, 'skip.json');
+  const proxyFile = path.join(directory, 'proxy.json');
   let currentProxy: Proxy | undefined;
 
   const getSkips = async () => {
@@ -39,6 +41,20 @@ export const proxyProvider = async (directory: string, { country, protocol, test
     }
   };
 
+  const getStoredProxy = async () => {
+    try {
+      const buf = await fs.readFile(proxyFile);
+      const proxy = JSON.parse(buf.toString()) as Proxy;
+      if (debug) {
+        console.log('Proxy', proxy.url, 'is your stored proxy.');
+      }
+      return proxy;
+    } catch {
+      return;
+    }
+  };
+
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const getNewProxy = async () => {
     for (const [_, source] of Object.entries(Source)) {
       let proxies = await getProxyList(source, { protocol });
@@ -50,11 +66,14 @@ export const proxyProvider = async (directory: string, { country, protocol, test
       for (const proxy of proxies) {
         try {
           await testProxy(proxy.url, { testUrl });
+          await fs.writeFile(proxyFile, JSON.stringify(proxy));
+          if (debug) {
+            console.log('Proxy', proxy.url, 'succeed.', 'Stored...');
+          }
           return proxy;
         } catch (err) {
           await addToSkip(proxy.url);
           if (debug) {
-            // eslint-disable-next-line no-console
             console.log('Proxy', proxy.url, 'failed:', errToString(err), 'Skiping...');
           }
         }
@@ -69,13 +88,18 @@ export const proxyProvider = async (directory: string, { country, protocol, test
     return new Promise<Proxy>((resolve) => {
       const handle = async () => {
         try {
-          const data = await cache.use('proxy', getNewProxy, { store: true });
-          await testProxy(data.url, { testUrl });
-          currentProxy = data;
-          resolve(data);
+          currentProxy = await getStoredProxy();
+          if (currentProxy) {
+            await testProxy(currentProxy.url, { testUrl });
+            resolve(currentProxy);
+          } else {
+            const proxy = await getNewProxy();
+            currentProxy = proxy;
+            resolve(proxy);
+          }
         } catch {
           coraline.log('The stored proxy is no more valid, gettin a new one...');
-          await cache.clear('proxy');
+          await coraline.rm(proxyFile);
           void handle();
         }
       };
@@ -92,7 +116,7 @@ export const proxyProvider = async (directory: string, { country, protocol, test
     getNextProxy: async () => {
       if (!currentProxy) throw new Error('There is no current proxy, please use getProxy before trying to get a next one.');
       await addToSkip(currentProxy.url);
-      await cache.clear('proxy');
+      await coraline.rm(proxyFile);
       return getProxy();
     },
   };
