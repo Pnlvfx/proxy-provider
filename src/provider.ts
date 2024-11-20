@@ -74,7 +74,7 @@ export const proxyProvider = async (directory: string, { country, protocol, test
           currentProxy = data;
           resolve(data);
         } catch {
-          coraline.log('red', `The stored proxy is no more valid, gettin a new one...`);
+          coraline.log('The stored proxy is no more valid, gettin a new one...');
           await cache.clear('proxy');
           void handle();
         }
