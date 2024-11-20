@@ -1,4 +1,4 @@
-import coraline from 'coraline';
+import coraline, { errToString } from 'coraline';
 import { getProxyList } from './list.js';
 import { Proxy } from './types.js';
 import { testProxy } from './helpers.js';
@@ -55,7 +55,7 @@ export const proxyProvider = async (directory: string, { country, protocol, test
           await addToSkip(proxy.url);
           if (debug) {
             // eslint-disable-next-line no-console
-            console.log('Proxy test failed:', err, 'Skiping...');
+            console.log('Proxy test failed:', errToString(err), 'Skiping...');
           }
         }
       }
