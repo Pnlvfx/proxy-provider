@@ -70,7 +70,7 @@ export const proxyProvider = async (directory: string, { country, protocol, test
       const handle = async () => {
         try {
           const data = await cache.use('proxy', getNewProxy, { store: true });
-          await testProxy(data.url);
+          await testProxy(data.url, { testUrl });
           currentProxy = data;
           resolve(data);
         } catch {
@@ -86,7 +86,7 @@ export const proxyProvider = async (directory: string, { country, protocol, test
   return {
     /** Get a list of free proxies from the specified source. You can use the Source enum to see all the available sources. */
     getProxyList,
-    /** Get a single free proxy, the proxy will be stored to the disk, If the proxy is no more valid it will not be detected, so you have to use: proxyProvider.testProxy to check if it's still valid. */
+    /** Get a single free proxy, the proxy will be stored to the disk, If the proxy is no more valid, you can use provider.getNextProxy to remove it and get a new one. */
     getProxy,
     /** Find a new proxy that will replace the current one. */
     getNextProxy: async () => {
