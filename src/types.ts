@@ -1,7 +1,6 @@
 import { AnonymityLevel, Protocol } from './enums.js';
 
 export interface Proxy {
-  isWorking: () => Promise<boolean>;
   url: string;
   ip: string;
   port: string;

@@ -5,12 +5,3 @@ export const testProxy = async (proxyUrl: string, { testUrl = 'https://api.ipify
   const res = await fetch(testUrl, { dispatcher: agent });
   if (!res.ok) throw new Error(`${res.status.toString()}: ${res.statusText}`);
 };
-
-export const isWorking = async (proxyUrl: string) => {
-  try {
-    await testProxy(proxyUrl);
-    return true;
-  } catch {
-    return false;
-  }
-};

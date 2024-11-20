@@ -1,6 +1,5 @@
 import type { ProxyListOptions } from '../list.js';
 import { AnonymityLevel, Protocol, Source } from '../enums.js';
-import { isWorking } from '../helpers.js';
 import { Proxy } from '../types.js';
 
 interface ProxyCheckerPN {
@@ -68,7 +67,6 @@ export const getCheckerProxyNexProxyList = async ({ protocol }: ProxyListOptions
       country: proxy.addr_geo_iso,
       city: proxy.addr_geo_city,
       lastTested: proxy.updated_at,
-      isWorking: () => isWorking(url),
     });
   }
   return proxyList;
