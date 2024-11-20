@@ -1,10 +1,9 @@
 /* eslint-disable no-console */
 import coraline from 'coraline';
-import proxyProvider, { Protocol, Source } from './index.js';
+import { proxyProvider, Protocol, Source } from './provider.js';
 
 const run = async () => {
-  const test = await coraline.createScriptExec({ title: 'Insert 1 to test the getProxy or 2 to test the getProxyList' });
-  if (!test) throw new Error('You have to insert an input to continue');
+  const test = await coraline.input.create({ title: 'Insert 1 to test the getProxy or 2 to test the getProxyList' });
   if (test === '1') {
     const proxy = await proxyProvider.getProxy({ protocol: Protocol.http, country: ['United States'] });
     console.log(proxy);

@@ -1,4 +1,4 @@
-import type { ProxyListOptions } from '../provider.js';
+import type { ProxyListOptions } from '../list.js';
 import { isWorking } from '../proxy.js';
 import { AnonymityLevel, Protocol, Proxy, Source } from '../types.js';
 

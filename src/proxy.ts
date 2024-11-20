@@ -1,5 +1,5 @@
 import coraline, { consoleColor } from 'coraline';
-import { getProxyList } from './provider.js';
+import { getProxyList } from './list.js';
 import { Protocol, Source } from './types.js';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import https from 'node:https';

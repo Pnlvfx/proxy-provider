@@ -1,16 +1,16 @@
-import { getCheckerProxyNexProxyList } from './proxies/checkerproxy-net.js';
-import { getHideMeProxyList } from './proxies/hideip-me.js';
-import { Protocol, Source } from './types.js';
+import { getProxyList } from './list.js';
+import { getProxy } from './proxy.js';
 
-export interface ProxyListOptions {
-  protocol?: Protocol | Protocol[];
-}
+// repo with a lot of good proxy sources
+// https://github.com/yasirerkam/proxyOPI/blob/main/src/index.ts
 
-export const getProxyList = (source: Source, options?: ProxyListOptions) => {
-  if (source === Source.HIDEMEIP) {
-    return getHideMeProxyList(options);
-  } else if (source === Source.CHECKERPROXY) {
-    return getCheckerProxyNexProxyList(options);
-  }
-  throw new Error('Please provide a valid source');
+export const proxyProvider = {
+  /** Get a list of free proxies from the specified source. You can use the Source enum to see all the available sources. */
+  getProxyList,
+  /** Get a single free proxy, the proxy will be stored to the disk, If the proxy is no more valid it will not be detected, so you have to use: proxyProvider.testProxy to check if it's still valid. */
+  getProxy,
 };
+
+export { AnonymityLevel, Protocol, Proxy, ProxyList, Source } from './types.js';
+export type { ProxyListOptions } from './list.js';
+export type { ProxyOptions } from './proxy.js';
