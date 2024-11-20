@@ -1,7 +1,7 @@
 import { findUnusedExports } from 'coraline';
 
 const unused = findUnusedExports({
-  ignoreFiles: ['eslint.config.js', 'jest.config.ts'],
+  ignoreFiles: ['provider.ts', 'eslint.config.js', 'jest.config.ts'],
   ignoreVars: [],
 });
 

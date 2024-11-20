@@ -13,7 +13,7 @@ export enum AnonymityLevel {
   unknown = 'unknown',
 }
 
-export type Proxy = {
+export interface Proxy {
   isWorking: () => Promise<boolean>;
   url: string;
   ip: string;
@@ -29,9 +29,12 @@ export type Proxy = {
   uptime?: string;
   responseTime?: string;
   verified?: string;
-};
+}
 
-export type ProxyList = { dateTime: number; list: Proxy[] };
+export interface ProxyList {
+  dateTime: number;
+  list: Proxy[];
+}
 
 export enum Source {
   HIDEMEIP = 'hideip.me',

@@ -2,7 +2,7 @@ import type { ProxyListOptions } from '../list.js';
 import { isWorking } from '../proxy.js';
 import { AnonymityLevel, Protocol, Proxy, Source } from '../types.js';
 
-type ProxyCheckerPN = {
+interface ProxyCheckerPN {
   id?: number;
   local_id?: number;
   report_id?: string;
@@ -24,9 +24,8 @@ type ProxyCheckerPN = {
   updated_at?: string;
   skip?: boolean;
   from_cache?: boolean;
-};
+}
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 export const getCheckerProxyNexProxyList = async ({ protocol }: ProxyListOptions = {}) => {
   const url = 'https://checkerproxy.net/api/archive/' + new Date().toJSON().slice(0, 10);
   const proxyList: Proxy[] = [];
@@ -44,12 +43,12 @@ export const getCheckerProxyNexProxyList = async ({ protocol }: ProxyListOptions
       'Referrer-Policy': 'strict-origin-when-cross-origin',
     },
   });
-  if (!res.ok) throw new Error(`checkerproxy error: ${res.status}: ${res.statusText}`);
-  const proxies: ProxyCheckerPN[] = await res.json();
+  if (!res.ok) throw new Error(`checkerproxy error: ${res.status.toString()}: ${res.statusText}`);
+  const proxies = (await res.json()) as ProxyCheckerPN[];
   for (const proxy of proxies) {
     const [ip, port] = proxy.addr.split(':');
-    const protocols: Protocol[] = transformProtocol(proxy.type || 0);
-    const kind: AnonymityLevel = transformAnonymityLevel(proxy.kind || 0);
+    const protocols: Protocol[] = transformProtocol(proxy.type ?? 0);
+    const kind: AnonymityLevel = transformAnonymityLevel(proxy.kind ?? 0);
     const proxyProtocol = protocols.at(0);
     if (!ip || !port || !proxyProtocol) continue;
     if (protocol) {

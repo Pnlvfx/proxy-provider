@@ -23,10 +23,10 @@ export const getHideMeProxyList = async ({ protocol }: ProxyListOptions = {}) =>
   const proxyList: Proxy[] = [];
   for (const { url, protocol } of urls) {
     const res = await fetch(url, { method: 'GET', headers: { 'User-Agent': coraline.getUserAgent() } });
-    if (!res.ok) throw new Error(`checkerproxy error: ${res.status}: ${res.statusText}`);
+    if (!res.ok) throw new Error(`checkerproxy error: ${res.status.toString()}: ${res.statusText}`);
     const txt = await res.text();
     const proxies = txt.split('\n');
-    proxies.map((proxy) => {
+    for (const proxy of proxies) {
       const cleanProxy = proxy.split(':');
       const ip = cleanProxy.at(0)?.trim();
       const port = cleanProxy.at(1)?.trim();
@@ -44,7 +44,7 @@ export const getHideMeProxyList = async ({ protocol }: ProxyListOptions = {}) =>
           country,
         });
       }
-    });
+    }
     break;
   }
   return proxyList;

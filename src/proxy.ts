@@ -4,22 +4,25 @@ import { Protocol, Source } from './types.js';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import https from 'node:https';
 
+const storage = await coraline.storage('proxy-provider');
+const cache = await coraline.cache(storage);
+
 const testProxy = (proxyUrl: string) => {
   return new Promise<string>((resolve, reject) => {
     const agent = new HttpsProxyAgent(proxyUrl);
     const req = https.get('https://api.ipify.org?format=json', { agent }, (res) => {
       if (!res.statusCode?.toString().startsWith('2')) {
-        reject(`${res.statusCode}: ${res.statusMessage}`);
+        reject(new Error(`${(res.statusCode ?? '').toString()}: ${res.statusMessage ?? ''}`));
         return;
       }
       res.on('error', reject);
       let data = '';
-      res.on('data', (chunk) => {
-        data += chunk;
+      res.on('data', (chunk: Buffer) => {
+        data += chunk.toString();
       });
       res.on('end', () => {
         clearTimeout(requestTimeout);
-        resolve(data.toString());
+        resolve(data);
       });
     });
     req.on('error', (err) => {
@@ -28,7 +31,7 @@ const testProxy = (proxyUrl: string) => {
     });
     const requestTimeout = setTimeout(() => {
       req.destroy();
-      reject('Request timed out');
+      reject(new Error('Request timed out'));
     }, 5000);
   });
 };
@@ -66,13 +69,13 @@ export const isWorking = async (proxyUrl: string) => {
 };
 
 export const getProxy = async ({ protocol, country }: ProxyOptions = {}) => {
-  const data = await coraline.cache.use('proxy', () => getNewProxy({ protocol, country }), { store: true });
+  const data = await cache.use('proxy', () => getNewProxy({ protocol, country }), { store: true });
   try {
     await testProxy(data.url);
     return data;
   } catch {
     consoleColor('red', `The stored proxy is no more valid, gettin a new one...`);
-    await coraline.cache.clear('proxy');
-    return coraline.cache.use('proxy', () => getNewProxy({ protocol, country }), { store: true });
+    await cache.clear('proxy');
+    return cache.use('proxy', () => getNewProxy({ protocol, country }), { store: true });
   }
 };
