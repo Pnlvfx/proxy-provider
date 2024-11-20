@@ -55,7 +55,7 @@ export const proxyProvider = async (directory: string, { country, protocol, test
           await addToSkip(proxy.url);
           if (debug) {
             // eslint-disable-next-line no-console
-            console.log('Proxy test failed:', errToString(err), 'Skiping...');
+            console.log('Proxy', proxy.url, 'failed:', errToString(err), 'Skiping...');
           }
         }
       }
