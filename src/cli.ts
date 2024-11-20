@@ -6,7 +6,8 @@ const run = async () => {
   const input = await coraline.input.create({ title: '1 to test the getProxy or 2 to test the getProxyList' });
   switch (input) {
     case '1': {
-      const proxy = await proxyProvider.getProxy({ protocol: Protocol.http, country: ['United States'] });
+      const cache = await coraline.cache('.test');
+      const proxy = await proxyProvider.getProxy({ protocol: Protocol.http, country: ['United States'], cache });
       console.log(proxy);
       break;
     }

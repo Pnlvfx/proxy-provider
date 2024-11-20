@@ -1,11 +1,8 @@
-import coraline, { consoleColor } from 'coraline';
+import { type Cache, consoleColor } from 'coraline';
 import { getProxyList } from './list.js';
 import { Protocol, Source } from './types.js';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import https from 'node:https';
-
-const storage = await coraline.storage('proxy-provider');
-const cache = await coraline.cache(storage);
 
 const testProxy = (proxyUrl: string) => {
   return new Promise<string>((resolve, reject) => {
@@ -41,7 +38,7 @@ export interface ProxyOptions {
   country?: string[];
 }
 
-const getNewProxy = async ({ protocol, country }: ProxyOptions = {}) => {
+const getNewProxy = async ({ protocol, country }: ProxyOptions) => {
   for (const [_i, provider] of Object.entries(Source)) {
     let proxies = await getProxyList(provider, { protocol });
     if (country) {
@@ -68,7 +65,7 @@ export const isWorking = async (proxyUrl: string) => {
   }
 };
 
-export const getProxy = async ({ protocol, country }: ProxyOptions = {}) => {
+export const getProxy = async ({ protocol, country, cache }: ProxyOptions & { cache: Cache }) => {
   const data = await cache.use('proxy', () => getNewProxy({ protocol, country }), { store: true });
   try {
     await testProxy(data.url);
