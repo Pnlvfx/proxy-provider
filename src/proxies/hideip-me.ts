@@ -1,7 +1,8 @@
+import { AnonymityLevel, Protocol, Source } from '../enums.js';
 import type { ProxyListOptions } from '../list.js';
 import coraline from 'coraline';
-import { AnonymityLevel, Protocol, Proxy, Source } from '../types.js';
-import { isWorking } from '../proxy.js';
+import { Proxy } from '../types.js';
+import { isWorking } from '../helpers.js';
 
 const proxyUrls = [
   { url: 'https://raw.githubusercontent.com/zloi-user/hideip.me/main/http.txt', protocol: Protocol.http },

@@ -1,6 +1,6 @@
+import { Protocol, Source } from './enums.js';
 import { getCheckerProxyNexProxyList } from './proxies/checkerproxy-net.js';
 import { getHideMeProxyList } from './proxies/hideip-me.js';
-import { Protocol, Source } from './types.js';
 
 export interface ProxyListOptions {
   protocol?: Protocol | Protocol[];

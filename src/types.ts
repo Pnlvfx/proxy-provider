@@ -1,17 +1,4 @@
-export enum Protocol {
-  http = 'http',
-  https = 'https',
-  socks4 = 'socks4',
-  socks5 = 'socks5',
-  unknown = 'unknown',
-}
-
-export enum AnonymityLevel {
-  transparent = 'transparent',
-  anonymous = 'anonymous',
-  elite = 'elite',
-  unknown = 'unknown',
-}
+import { AnonymityLevel, Protocol } from './enums.js';
 
 export interface Proxy {
   isWorking: () => Promise<boolean>;
@@ -34,9 +21,4 @@ export interface Proxy {
 export interface ProxyList {
   dateTime: number;
   list: Proxy[];
-}
-
-export enum Source {
-  HIDEMEIP = 'hideip.me',
-  CHECKERPROXY = 'checkerproxy.net',
 }

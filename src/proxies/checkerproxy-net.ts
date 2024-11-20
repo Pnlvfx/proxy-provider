@@ -1,6 +1,7 @@
+import { AnonymityLevel, Protocol, Source } from '../enums.js';
+import { isWorking } from '../helpers.js';
 import type { ProxyListOptions } from '../list.js';
-import { isWorking } from '../proxy.js';
-import { AnonymityLevel, Protocol, Proxy, Source } from '../types.js';
+import { Proxy } from '../types.js';
 
 interface ProxyCheckerPN {
   id?: number;
@@ -48,7 +49,7 @@ export const getCheckerProxyNexProxyList = async ({ protocol }: ProxyListOptions
   for (const proxy of proxies) {
     const [ip, port] = proxy.addr.split(':');
     const protocols: Protocol[] = transformProtocol(proxy.type ?? 0);
-    const kind: AnonymityLevel = transformAnonymityLevel(proxy.kind ?? 0);
+    const kind = transformAnonymityLevel(proxy.kind ?? 0);
     const proxyProtocol = protocols.at(0);
     if (!ip || !port || !proxyProtocol) continue;
     if (protocol) {
@@ -58,7 +59,6 @@ export const getCheckerProxyNexProxyList = async ({ protocol }: ProxyListOptions
     }
     const url = `${proxyProtocol}://${ip}:${port}`;
     proxyList.push({
-      isWorking: () => isWorking(url),
       url,
       ip,
       port,
@@ -68,6 +68,7 @@ export const getCheckerProxyNexProxyList = async ({ protocol }: ProxyListOptions
       country: proxy.addr_geo_iso,
       city: proxy.addr_geo_city,
       lastTested: proxy.updated_at,
+      isWorking: () => isWorking(url),
     });
   }
   return proxyList;
