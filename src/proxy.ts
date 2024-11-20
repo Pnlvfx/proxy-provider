@@ -1,37 +1,9 @@
 import { type Cache, consoleColor } from 'coraline';
 import { getProxyList } from './list.js';
 import { Protocol, Source } from './types.js';
-import { HttpsProxyAgent } from 'https-proxy-agent';
-import https from 'node:https';
+import { testProxy } from './test.js';
 
-const testProxy = (proxyUrl: string) => {
-  return new Promise<string>((resolve, reject) => {
-    const agent = new HttpsProxyAgent(proxyUrl);
-    const req = https.get('https://api.ipify.org?format=json', { agent }, (res) => {
-      if (!res.statusCode?.toString().startsWith('2')) {
-        reject(new Error(`${(res.statusCode ?? '').toString()}: ${res.statusMessage ?? ''}`));
-        return;
-      }
-      res.on('error', reject);
-      let data = '';
-      res.on('data', (chunk: Buffer) => {
-        data += chunk.toString();
-      });
-      res.on('end', () => {
-        clearTimeout(requestTimeout);
-        resolve(data);
-      });
-    });
-    req.on('error', (err) => {
-      clearTimeout(requestTimeout);
-      reject(err);
-    });
-    const requestTimeout = setTimeout(() => {
-      req.destroy();
-      reject(new Error('Request timed out'));
-    }, 5000);
-  });
-};
+/** @TODO Implement a way to get next proxy if the current fail. */
 
 export interface ProxyOptions {
   protocol?: Protocol;
