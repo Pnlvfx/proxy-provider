@@ -19,6 +19,7 @@ export interface ProxyOptions {
 
 export const proxyProvider = async (coraPath: string, { country, protocol, testUrl, debug }: ProxyOptions = {}) => {
   const directory = path.join(coraPath, '.proxy');
+  await initDir(directory);
   const skipFile = path.join(directory, 'skip.json');
   const proxyFile = path.join(directory, 'proxy.json');
   let currentProxy: Proxy | undefined;
@@ -97,14 +98,18 @@ export const proxyProvider = async (coraPath: string, { country, protocol, testU
             currentProxy = proxy;
             resolve(proxy);
           }
-        } catch {
-          coraline.log('The stored proxy is no more valid, gettin a new one...');
+        } catch (err) {
+          coraline.log(`The stored proxy is no more valid: ${errToString(err)}, gettin a new one...`);
           await coraline.rm(proxyFile);
           void handle();
         }
       };
       void handle();
     });
+  };
+
+  const reset = async () => {
+    await coraline.clearFolder(directory);
   };
 
   return {
@@ -119,7 +124,16 @@ export const proxyProvider = async (coraPath: string, { country, protocol, testU
       await coraline.rm(proxyFile);
       return getProxy();
     },
+    reset,
   };
+};
+
+const initDir = async (directory: string) => {
+  try {
+    await fs.access(directory);
+  } catch {
+    await fs.mkdir(directory);
+  }
 };
 
 export type { Proxy, ProxyList } from './types.js';
