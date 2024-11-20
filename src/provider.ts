@@ -94,9 +94,8 @@ export const proxyProvider = async (coraPath: string, { country, protocol, testU
             await testProxy(currentProxy.url, { testUrl });
             resolve(currentProxy);
           } else {
-            const proxy = await getNewProxy();
-            currentProxy = proxy;
-            resolve(proxy);
+            currentProxy = await getNewProxy();
+            resolve(currentProxy);
           }
         } catch (err) {
           coraline.log(`The stored proxy is no more valid: ${errToString(err)}, gettin a new one...`);
@@ -122,7 +121,8 @@ export const proxyProvider = async (coraPath: string, { country, protocol, testU
       if (!currentProxy) throw new Error('There is no current proxy, please use getProxy before trying to get a next one.');
       await addToSkip(currentProxy.url);
       await coraline.rm(proxyFile);
-      return getProxy();
+      currentProxy = await getNewProxy();
+      return currentProxy;
     },
     reset,
   };
