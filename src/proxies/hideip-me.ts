@@ -1,5 +1,5 @@
-import { AnonymityLevel, Protocol, Source } from '../enums.js';
 import type { ProxyListOptions } from '../list.js';
+import { AnonymityLevel, Protocol, Source } from '../enums.js';
 import coraline from 'coraline';
 import { Proxy } from '../types.js';
 import { isWorking } from '../helpers.js';
@@ -22,8 +22,8 @@ const getUrls = (protocol?: Protocol | Protocol[]) => {
 export const getHideMeProxyList = async ({ protocol }: ProxyListOptions = {}) => {
   const urls = getUrls(protocol);
   const proxyList: Proxy[] = [];
-  for (const { url, protocol } of urls) {
-    const res = await fetch(url, { method: 'GET', headers: { 'User-Agent': coraline.getUserAgent() } });
+  for (const item of urls) {
+    const res = await fetch(item.url, { method: 'GET', headers: { 'user-agent': coraline.getUserAgent() } });
     if (!res.ok) throw new Error(`checkerproxy error: ${res.status.toString()}: ${res.statusText}`);
     const txt = await res.text();
     const proxies = txt.split('\n');
@@ -33,13 +33,13 @@ export const getHideMeProxyList = async ({ protocol }: ProxyListOptions = {}) =>
       const port = cleanProxy.at(1)?.trim();
       const country = cleanProxy.at(2)?.trim();
       if (ip && port) {
-        const url = `${protocol}://${ip}:${port}`;
+        const url = `${item.protocol}://${ip}:${port}`;
         proxyList.push({
           isWorking: () => isWorking(url),
           url,
           ip,
           port,
-          protocols: [protocol],
+          protocols: [item.protocol],
           sourceSite: Source.HIDEMEIP,
           anonymityLevel: AnonymityLevel.unknown,
           country,

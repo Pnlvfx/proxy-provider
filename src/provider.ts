@@ -10,7 +10,7 @@ import { Protocol, Source } from './enums.js';
 // https://github.com/yasirerkam/proxyOPI/blob/main/src/index.ts
 
 export interface ProxyOptions {
-  protocol?: Protocol;
+  protocol?: Protocol | Protocol[];
   country?: string[];
   testUrl?: string;
   debug?: boolean;
@@ -40,8 +40,8 @@ export const proxyProvider = async (directory: string, { country, protocol, test
   };
 
   const getNewProxy = async () => {
-    for (const [_, provider] of Object.entries(Source)) {
-      let proxies = await getProxyList(provider, { protocol });
+    for (const [_, source] of Object.entries(Source)) {
+      let proxies = await getProxyList(source, { protocol });
       if (country) {
         proxies = proxies.filter((pp) => pp.country && country.includes(pp.country));
       }
