@@ -54,13 +54,16 @@ export default tseslint.config(
 
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
-      'sonarjs/sonar-no-unused-vars': 'off',
+      'sonarjs/no-unused-vars': 'off',
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/catch-error-name': 'off',
 
       // duplicates of tseslint
       'sonarjs/no-misused-promises': 'off',
       'sonarjs/sonar-prefer-optional-chain': 'off',
+
+      // issue with joi className
+      'unicorn/no-keyword-prefix': 'off',
     },
   },
   {
