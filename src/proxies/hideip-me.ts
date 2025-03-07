@@ -1,7 +1,7 @@
 import type { ProxyListOptions } from '../list.js';
+import type { Proxy } from '../types.js';
 import { AnonymityLevel, Protocol, Source } from '../enums.js';
-import coraline from 'coraline';
-import { Proxy } from '../types.js';
+import { getUserAgent } from '@goatjs/node/user-agent';
 
 const proxyUrls = [
   { url: 'https://raw.githubusercontent.com/zloi-user/hideip.me/main/http.txt', protocol: Protocol.http },
@@ -22,7 +22,7 @@ export const getHideMeProxyList = async ({ protocol }: ProxyListOptions = {}) =>
   const urls = getUrls(protocol);
   const proxyList: Proxy[] = [];
   for (const item of urls) {
-    const res = await fetch(item.url, { method: 'GET', headers: { 'user-agent': coraline.getUserAgent() } });
+    const res = await fetch(item.url, { method: 'GET', headers: { 'user-agent': getUserAgent() } });
     if (!res.ok) throw new Error(`checkerproxy error: ${res.status.toString()}: ${res.statusText}`);
     const txt = await res.text();
     const proxies = txt.split('\n');

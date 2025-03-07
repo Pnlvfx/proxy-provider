@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
-import coraline, { errToString } from 'coraline';
+import type { Proxy } from './types.js';
 import { getProxyList } from './list.js';
-import { Proxy } from './types.js';
 import { testProxy } from './helpers.js';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import { Protocol, Source } from './enums.js';
+import { errorToString } from '@goatjs/core/error';
+import { storage } from '@goatjs/storage';
 
 // repo with a lot of good proxy sources
 // https://github.com/yasirerkam/proxyOPI/blob/main/src/index.ts
@@ -75,7 +76,7 @@ export const proxyProvider = async (coraPath: string, { country, protocol, testU
         } catch (err) {
           await addToSkip(proxy.url);
           if (debug) {
-            console.log('Proxy', proxy.url, 'failed:', errToString(err), 'Skiping...');
+            console.log('Proxy', proxy.url, 'failed:', errorToString(err), 'Skiping...');
           }
         }
       }
@@ -98,8 +99,8 @@ export const proxyProvider = async (coraPath: string, { country, protocol, testU
             resolve(currentProxy);
           }
         } catch (err) {
-          coraline.log(`The stored proxy is no more valid: ${errToString(err)}, gettin a new one...`);
-          await coraline.rm(proxyFile);
+          console.log(`The stored proxy is no more valid: ${errorToString(err)}, gettin a new one...`);
+          await fs.rm(proxyFile);
           void handle();
         }
       };
@@ -108,7 +109,7 @@ export const proxyProvider = async (coraPath: string, { country, protocol, testU
   };
 
   const reset = async () => {
-    await coraline.clearFolder(directory);
+    await storage.clearFolder(directory);
   };
 
   return {
@@ -120,7 +121,7 @@ export const proxyProvider = async (coraPath: string, { country, protocol, testU
     getNextProxy: async () => {
       if (!currentProxy) throw new Error('There is no current proxy, please use getProxy before trying to get a next one.');
       await addToSkip(currentProxy.url);
-      await coraline.rm(proxyFile);
+      await fs.rm(proxyFile);
       currentProxy = await getNewProxy();
       return currentProxy;
     },

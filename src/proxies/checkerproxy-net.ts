@@ -1,6 +1,6 @@
 import type { ProxyListOptions } from '../list.js';
+import type { Proxy } from '../types.js';
 import { AnonymityLevel, Protocol, Source } from '../enums.js';
-import { Proxy } from '../types.js';
 
 interface ProxyCheckerPN {
   id?: number;
