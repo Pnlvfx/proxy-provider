@@ -21,3 +21,7 @@ export interface ProxyList {
   dateTime: number;
   list: Proxy[];
 }
+
+export interface ProxyListOptions {
+  protocol?: Protocol | Protocol[];
+}

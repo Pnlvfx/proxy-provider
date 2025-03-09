@@ -1,10 +1,7 @@
-import { Protocol, Source } from './enums.js';
+import type { ProxyListOptions } from './types.js';
+import { Source } from './enums.js';
 import { getCheckerProxyNexProxyList } from './proxies/checkerproxy-net.js';
 import { getHideMeProxyList } from './proxies/hideip-me.js';
-
-export interface ProxyListOptions {
-  protocol?: Protocol | Protocol[];
-}
 
 export const getProxyList = (source: Source, options?: ProxyListOptions) => {
   switch (source) {

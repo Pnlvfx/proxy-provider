@@ -137,5 +137,5 @@ const initDir = async (directory: string) => {
   }
 };
 
-export type { Proxy, ProxyList } from './types.js';
+export type * from './types.js';
 export { Source, Protocol, AnonymityLevel } from './enums.js';
