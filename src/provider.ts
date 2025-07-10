@@ -5,8 +5,9 @@ import { testProxy } from './helpers.js';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import { Protocol, Source } from './enums.js';
-import { errorToString } from '@goatjs/core/error';
+import { parseCatchError } from '@goatjs/core/error';
 import { storage } from '@goatjs/storage';
+import { clearFolder } from '@goatjs/node/fs';
 
 // repo with a lot of good proxy sources
 // https://github.com/yasirerkam/proxyOPI/blob/main/src/index.ts
@@ -18,8 +19,8 @@ export interface ProxyOptions {
   debug?: boolean;
 }
 
-export const proxyProvider = async (coraPath: string, { country, protocol, testUrl, debug }: ProxyOptions = {}) => {
-  const directory = path.join(coraPath, '.proxy');
+export const proxyProvider = async ({ country, protocol, testUrl, debug }: ProxyOptions = {}) => {
+  const directory = await storage.use('.proxy');
   await initDir(directory);
   const skipFile = path.join(directory, 'skip.json');
   const proxyFile = path.join(directory, 'proxy.json');
@@ -76,7 +77,7 @@ export const proxyProvider = async (coraPath: string, { country, protocol, testU
         } catch (err) {
           await addToSkip(proxy.url);
           if (debug) {
-            console.log('Proxy', proxy.url, 'failed:', errorToString(err), 'Skiping...');
+            console.log('Proxy', proxy.url, 'failed:', parseCatchError(err).message, 'Skiping...');
           }
         }
       }
@@ -99,7 +100,7 @@ export const proxyProvider = async (coraPath: string, { country, protocol, testU
             resolve(currentProxy);
           }
         } catch (err) {
-          console.log(`The stored proxy is no more valid: ${errorToString(err)}, gettin a new one...`);
+          console.log(`The stored proxy is no more valid: ${parseCatchError(err).message}, gettin a new one...`);
           await fs.rm(proxyFile);
           void handle();
         }
@@ -108,8 +109,8 @@ export const proxyProvider = async (coraPath: string, { country, protocol, testU
     });
   };
 
-  const reset = async () => {
-    await storage.clearFolder(directory);
+  const reset = () => {
+    return clearFolder(directory);
   };
 
   return {
@@ -131,10 +132,8 @@ export const proxyProvider = async (coraPath: string, { country, protocol, testU
 
 const initDir = async (directory: string) => {
   try {
-    await fs.access(directory);
-  } catch {
     await fs.mkdir(directory);
-  }
+  } catch {}
 };
 
 export type * from './types.js';

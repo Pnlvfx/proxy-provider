@@ -5,7 +5,7 @@ import { Protocol, proxyProvider, Source } from '../src/provider.js';
 
 const run = async () => {
   const text = await input.create({ title: '1 to test the getProxy or 2 to test the getProxyList' });
-  const provider = await proxyProvider('.test', { protocol: Protocol.http });
+  const provider = await proxyProvider({ protocol: Protocol.http });
   switch (text) {
     case '1': {
       const proxy = await provider.getProxy();
