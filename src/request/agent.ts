@@ -20,3 +20,5 @@ export const createProxyAgent = async (options: ProxyOptions = {}) => {
     },
   };
 };
+
+export type AgentProvider = Awaited<ReturnType<typeof createProxyAgent>>;
