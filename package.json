@@ -16,8 +16,14 @@
   "module": "./dist/provider.js",
   "types": "./dist/provider.d.ts",
   "exports": {
-    "types": "./dist/provider.d.ts",
-    "import": "./dist/provider.js"
+    ".": {
+      "types": "./dist/provider.d.ts",
+      "import": "./dist/provider.js"
+    },
+    "./request": {
+      "types": "./dist/request/agent.d.ts",
+      "import": "./dist/request/agent.js"
+    }
   },
   "scripts": {
     "tsc": "tsc --noEmit true",

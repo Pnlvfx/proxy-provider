@@ -21,7 +21,6 @@ export interface ProxyOptions {
 
 export const proxyProvider = async ({ country, protocol, testUrl, debug }: ProxyOptions = {}) => {
   const directory = await storage.use('.proxy');
-  await initDir(directory);
   const skipFile = path.join(directory, 'skip.json');
   const proxyFile = path.join(directory, 'proxy.json');
   let currentProxy: Proxy | undefined;
@@ -86,7 +85,7 @@ export const proxyProvider = async ({ country, protocol, testUrl, debug }: Proxy
   };
 
   /** Get a single free proxy, the proxy will be stored to the disk, If the proxy is no more valid it will not be detected, so you have to use: proxyProvider.testProxy to check if it's still valid. */
-  const getProxy = () => {
+  const getCurrentProxy = () => {
     if (currentProxy) return currentProxy;
     return new Promise<Proxy>((resolve) => {
       const handle = async () => {
@@ -117,7 +116,7 @@ export const proxyProvider = async ({ country, protocol, testUrl, debug }: Proxy
     /** Get a list of free proxies from the specified source. You can use the Source enum to see all the available sources. */
     getProxyList,
     /** Get a single free proxy, the proxy will be stored to the disk, If the proxy is no more valid, you can use provider.getNextProxy to remove it and get a new one. */
-    getProxy,
+    getCurrentProxy,
     /** Find a new proxy that will replace the current one. */
     getNextProxy: async () => {
       if (!currentProxy) throw new Error('There is no current proxy, please use getProxy before trying to get a next one.');
@@ -128,12 +127,6 @@ export const proxyProvider = async ({ country, protocol, testUrl, debug }: Proxy
     },
     reset,
   };
-};
-
-const initDir = async (directory: string) => {
-  try {
-    await fs.mkdir(directory);
-  } catch {}
 };
 
 export type * from './types.js';
