@@ -8,7 +8,7 @@ const run = async () => {
   const provider = await proxyProvider({ protocol: Protocol.http });
   switch (text) {
     case '1': {
-      const proxy = await provider.getProxy();
+      const proxy = await provider.getCurrentProxy();
       console.log(proxy);
       break;
     }
