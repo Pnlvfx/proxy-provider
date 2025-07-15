@@ -4,7 +4,7 @@ import { input } from '@goatjs/node/input';
 import { Protocol, proxyProvider, Source } from '../src/provider.js';
 
 const run = async () => {
-  const text = await input.create({ title: '1 to test the getProxy or 2 to test the getProxyList' });
+  const text = await input.create({ title: '1. getProxy\n2. getProxyList' });
   const provider = await proxyProvider({ protocol: Protocol.http });
   switch (text) {
     case '1': {
