@@ -1,7 +1,7 @@
 {
   "name": "proxy-provider",
   "description": "Free proxy api.",
-  "version": "2024.2.19",
+  "version": "1.0.0",
   "author": {
     "email": "simonegauli@gmail.com",
     "name": "Simone Gauli"
@@ -26,16 +26,17 @@
     }
   },
   "scripts": {
-    "tsc": "tsc --noEmit true",
+    "tsc": "tsc --noEmit",
     "unused": "node tools/unused.ts",
     "dev": "tsx --no-cache --watch tools/cli.ts",
-    "test": "rimraf coverage && jest --coverage",
+    "test": "",
     "lint": "eslint",
     "build": "rimraf dist && eslint && tsc -p tsconfig.build.json",
     "prepare": "husky",
     "prepack": "yarn build",
     "prepublishOnly": "yarn test && eslint",
-    "update": "node tools/update.ts && yarn upgrade-interactive"
+    "update": "yarn upgrade-interactive",
+    "publish": "node tools/publish.ts"
   },
   "files": [
     "dist",
@@ -43,27 +44,21 @@
     "README.md"
   ],
   "devDependencies": {
-    "@eslint/js": "^9.31.0",
-    "@goatjs/core": "github:Pnlvfx/goatjs#workspace=@goatjs/core",
-    "@goatjs/eslint": "github:Pnlvfx/eslint",
-    "@goatjs/node": "github:Pnlvfx/goatjs#workspace=@goatjs/node",
-    "@goatjs/rimraf": "github:Pnlvfx/goatjs#workspace=@goatjs/rimraf",
-    "@goatjs/storage": "github:Pnlvfx/goatjs#workspace=@goatjs/storage",
-    "@goatjs/ts-unused-exports": "github:Pnlvfx/goatjs#workspace=@goatjs/ts-unused-exports",
-    "@goatjs/typescript-config": "github:Pnlvfx/typescript-config",
-    "@goatjs/updater": "github:Pnlvfx/goatjs#workspace=@goatjs/updater",
+    "@goatjs/core": "^1.0.3",
+    "@goatjs/dev": "^1.0.3",
+    "@goatjs/git": "^1.0.3",
+    "@goatjs/node": "^1.0.3",
+    "@goatjs/node-eslint": "^1.0.6",
+    "@goatjs/rimraf": "^1.0.3",
+    "@goatjs/storage": "^1.0.3",
+    "@goatjs/ts-unused-exports": "^1.0.3",
+    "@goatjs/typescript-config": "^1.0.3",
     "@types/node": "^24.0.13",
     "eslint": "^9.31.0",
-    "eslint-plugin-sonarjs": "^3.0.4",
-    "eslint-plugin-unicorn": "^59.0.1",
     "husky": "^9.1.7",
-    "jest": "^30.0.4",
     "prettier": "^3.6.2",
-    "ts-jest": "^29.4.0",
-    "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.37.0",
     "undici": "^7.11.0"
   },
   "peerDependencies": {

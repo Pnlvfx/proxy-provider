@@ -1,7 +1,7 @@
 import { findUnusedExports } from '@goatjs/ts-unused-exports';
 
 const unused = await findUnusedExports({
-  ignoreFiles: ['provider.ts', 'eslint.config.js', 'jest.config.ts'],
+  ignoreFiles: ['provider.ts', 'eslint.config.js'],
   ignoreVars: ['createProxyAgent', 'AgentProvider'],
 });
 
