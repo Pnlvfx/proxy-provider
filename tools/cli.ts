@@ -1,25 +1,29 @@
 /* eslint-disable no-console */
 
+import type { ProtoProxy } from '../src/helpers.js';
 import { input } from '@goatjs/node/input';
 import { proxyProvider } from '../src/provider.js';
-import { constructProxyUrl, testProxy } from '../src/helpers.js';
-import type { Proxy } from '../src/geonode/types.js';
 import { geonode } from '../src/geonode/geonode.js';
+import { setTimeout } from 'node:timers/promises';
 
 const run = async () => {
   try {
     const text = await input.create({ title: '1. getProxy\n2. getProxyList' });
-    const provider = await proxyProvider({ protocol: 'http', debug: true });
+    const provider = await proxyProvider({ protocols: 'http' });
+    await provider.reset();
     switch (text) {
       case '1': {
         const proxy = await provider.getCurrentProxy();
         await new Promise<void>((resolve) => {
-          const makeRequest = async (p: Proxy) => {
+          const makeRequest = async (p: ProtoProxy) => {
             try {
-              await testProxy(constructProxyUrl(p, { protocol: 'http' }));
+              const url = p.urls.https ?? p.urls.http;
+              if (!url) throw new Error('No valid proxy found!');
+              await url.test();
               resolve();
             } catch (err) {
               console.log(err);
+              await setTimeout(30);
               await makeRequest(await provider.getNextProxy());
               resolve();
             }
