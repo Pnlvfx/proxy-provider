@@ -2917,6 +2917,7 @@ __metadata:
     "@goatjs/node": "*"
     "@goatjs/storage": "*"
     undici: "*"
+    zod: "*"
   languageName: unknown
   linkType: soft
 
