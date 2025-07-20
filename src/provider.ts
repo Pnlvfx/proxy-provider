@@ -1,28 +1,21 @@
 /* eslint-disable no-console */
-import type { Proxy } from './types.js';
-import { getProxyList } from './list.js';
-import { testProxy } from './helpers.js';
+import type { Protocol, Proxy } from './geonode/types.js';
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import { Protocol, Source } from './enums.js';
-import { parseCatchError } from '@goatjs/core/error';
 import { storage } from '@goatjs/storage';
-import { clearFolder } from '@goatjs/node/fs';
+import { clearFolder, pathExist } from '@goatjs/node/fs';
+import { getProxyList } from './proxy.js';
 
-// repo with a lot of good proxy sources
-// https://github.com/yasirerkam/proxyOPI/blob/main/src/index.ts
-
-export interface ProxyOptions {
-  protocol?: Protocol | Protocol[];
-  country?: string[];
-  testUrl?: string;
+export interface ProviderOptions {
+  protocol?: Protocol;
+  country?: string;
   debug?: boolean;
 }
 
-export const proxyProvider = async ({ country, protocol, testUrl, debug }: ProxyOptions = {}) => {
+export const proxyProvider = async ({ country, protocol, debug }: ProviderOptions = {}) => {
   const directory = await storage.use('.proxy');
-  const skipFile = path.join(directory, 'skip.json');
   const proxyFile = path.join(directory, 'proxy.json');
+  const skipFile = path.join(directory, 'skip.json');
   let currentProxy: Proxy | undefined;
 
   const getSkips = async () => {
@@ -36,9 +29,12 @@ export const proxyProvider = async ({ country, protocol, testUrl, debug }: Proxy
 
   const skips = await getSkips();
 
-  const addToSkip = async (url: string) => {
-    if (!skips.includes(url)) {
-      skips.push(url);
+  const addToSkip = async (ip: string) => {
+    if (await pathExist(proxyFile)) {
+      await fs.rm(proxyFile);
+    }
+    if (!skips.includes(ip)) {
+      skips.push(ip);
       await fs.writeFile(skipFile, JSON.stringify(skips));
     }
   };
@@ -48,7 +44,7 @@ export const proxyProvider = async ({ country, protocol, testUrl, debug }: Proxy
       const buf = await fs.readFile(proxyFile);
       const proxy = JSON.parse(buf.toString()) as Proxy;
       if (debug) {
-        console.log('Proxy', proxy.url, 'is your stored proxy.');
+        console.log('Proxy', proxy.ip, 'is your stored proxy.');
       }
       return proxy;
     } catch {
@@ -56,56 +52,22 @@ export const proxyProvider = async ({ country, protocol, testUrl, debug }: Proxy
     }
   };
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
-  const getNewProxy = async () => {
-    for (const [_, source] of Object.entries(Source)) {
-      let proxies = await getProxyList(source, { protocol });
-      if (country) {
-        proxies = proxies.filter((pp) => pp.country && country.includes(pp.country));
-      }
-      proxies = proxies.filter((p) => !skips.includes(p.url));
-      if (proxies.length === 0) throw new Error('No more proxies left, please implement a way to reset and retry each one.');
-      for (const proxy of proxies) {
-        try {
-          await testProxy(proxy.url, { testUrl });
-          await fs.writeFile(proxyFile, JSON.stringify(proxy));
-          if (debug) {
-            console.log('Proxy', proxy.url, 'succeed.', 'Stored...');
-          }
-          return proxy;
-        } catch (err) {
-          await addToSkip(proxy.url);
-          if (debug) {
-            console.log('Proxy', proxy.url, 'failed:', parseCatchError(err).message, 'Skiping...');
-          }
-        }
-      }
+  const getNextProxy = async () => {
+    if (currentProxy) {
+      await addToSkip(currentProxy.ip);
     }
-    throw new Error('No proxy found with this options');
+    let proxies = await getProxyList({ country, protocol });
+    proxies = proxies.filter((p) => !skips.includes(p.ip));
+    currentProxy = proxies.at(0);
+    if (!currentProxy) throw new Error('No more available proxies.');
+    await fs.writeFile(proxyFile, JSON.stringify(currentProxy));
+    return currentProxy;
   };
 
-  /** Get a single free proxy, the proxy will be stored to the disk, If the proxy is no more valid it will not be detected, so you have to use: proxyProvider.testProxy to check if it's still valid. */
-  const getCurrentProxy = () => {
+  const getCurrentProxy = async () => {
     if (currentProxy) return currentProxy;
-    return new Promise<Proxy>((resolve) => {
-      const handle = async () => {
-        try {
-          currentProxy = await getStoredProxy();
-          if (currentProxy) {
-            await testProxy(currentProxy.url, { testUrl });
-            resolve(currentProxy);
-          } else {
-            currentProxy = await getNewProxy();
-            resolve(currentProxy);
-          }
-        } catch (err) {
-          console.log(`The stored proxy is no more valid: ${parseCatchError(err).message}, gettin a new one...`);
-          await fs.rm(proxyFile);
-          void handle();
-        }
-      };
-      void handle();
-    });
+    currentProxy = (await getStoredProxy()) ?? (await getNextProxy());
+    return currentProxy;
   };
 
   const reset = () => {
@@ -113,22 +75,12 @@ export const proxyProvider = async ({ country, protocol, testUrl, debug }: Proxy
   };
 
   return {
-    /** Get a list of free proxies from the specified source. You can use the Source enum to see all the available sources. */
-    getProxyList,
+    reset,
     /** Get a single free proxy, the proxy will be stored to the disk, If the proxy is no more valid, you can use provider.getNextProxy to remove it and get a new one. */
     getCurrentProxy,
     /** Find a new proxy that will replace the current one. */
-    getNextProxy: async () => {
-      if (!currentProxy) throw new Error('There is no current proxy, please use getProxy before trying to get a next one.');
-      await addToSkip(currentProxy.url);
-      await fs.rm(proxyFile);
-      currentProxy = await getNewProxy();
-      return currentProxy;
-    },
-    reset,
+    getNextProxy,
   };
 };
 
-export type * from './types.js';
-export { Source, Protocol, AnonymityLevel } from './enums.js';
 export type ProxyProvider = Awaited<ReturnType<typeof proxyProvider>> | undefined;

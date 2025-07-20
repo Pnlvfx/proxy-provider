@@ -1,27 +1,48 @@
 /* eslint-disable no-console */
 
 import { input } from '@goatjs/node/input';
-import { Protocol, proxyProvider, Source } from '../src/provider.js';
+import { proxyProvider } from '../src/provider.js';
+import { constructProxyUrl, testProxy } from '../src/helpers.js';
+import type { Proxy } from '../src/geonode/types.js';
+import { geonode } from '../src/geonode/geonode.js';
 
 const run = async () => {
-  const text = await input.create({ title: '1. getProxy\n2. getProxyList' });
-  const provider = await proxyProvider({ protocol: Protocol.http });
-  switch (text) {
-    case '1': {
-      const proxy = await provider.getCurrentProxy();
-      console.log(proxy);
-      break;
+  try {
+    const text = await input.create({ title: '1. getProxy\n2. getProxyList' });
+    const provider = await proxyProvider({ protocol: 'http', debug: true });
+    switch (text) {
+      case '1': {
+        const proxy = await provider.getCurrentProxy();
+        await new Promise<void>((resolve) => {
+          const makeRequest = async (p: Proxy) => {
+            try {
+              await testProxy(constructProxyUrl(p, { protocol: 'http' }));
+              resolve();
+            } catch (err) {
+              console.log(err);
+              await makeRequest(await provider.getNextProxy());
+              resolve();
+            }
+          };
+
+          void makeRequest(proxy);
+        });
+        break;
+      }
+      case '2': {
+        const proxies = await geonode.getProxyList();
+        console.log(proxies);
+        break;
+      }
+      default: {
+        console.log('Invalid input provided.');
+      }
     }
-    case '2': {
-      const proxies = await provider.getProxyList(Source.CHECKERPROXY, { protocol: Protocol.http });
-      console.log(proxies);
-      break;
-    }
-    default: {
-      console.log('Invalid input provided.');
-    }
+  } catch (err) {
+    console.error(err);
   }
-  await run();
+
+  void run();
 };
 
 await run();
