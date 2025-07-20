@@ -21,6 +21,7 @@ export const createProxyAgent = async (options: Omit<ProviderOptions, 'protocols
       const url = proxy.urls.https ?? proxy.urls.http;
       if (!url) throw new Error('Invalid proxy received');
       agent = new ProxyAgent(url.url);
+      return agent;
     },
   };
 };
