@@ -5,9 +5,9 @@ interface ProxyOptions {
   page?: number;
   sort_by?: 'lastChecked';
   sort_type?: 'desc';
-  protocols?: Protocol; // not sure if i can use the join with comma, docs are not clear.
+  protocols?: Protocol; // TODO not sure if i can use the join with comma, docs are not clear.
   /** Two letter country, eg: US */
-  country?: string; // not sure if i can use the join with comma, docs are not clear.
+  country?: string; // TODO not sure if i can use the join with comma, docs are not clear.
 }
 
 const BASE_URL = 'https://proxylist.geonode.com/api/proxy-list';
@@ -18,7 +18,7 @@ export const geonode = {
     if (protocols) {
       // const arr = typeof protocols === 'string' ? [protocols] : protocols;
       // q.append('protocols', arr.join(','));
-      q.append(protocols, protocols);
+      q.append('protocols', protocols);
     }
     if (country) {
       // const arr = typeof country === 'string' ? [country] : country;
