@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import type { ProtoProxy } from '../src/helpers.js';
-import { input } from '@goatjs/node/input';
+import { input } from '@goatjs/dev/input';
 import { proxyProvider } from '../src/provider.js';
 import { geonode } from '../src/geonode/geonode.js';
 import { setTimeout } from 'node:timers/promises';
