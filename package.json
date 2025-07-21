@@ -1,7 +1,7 @@
 {
   "name": "proxy-provider",
   "description": "Free proxy api.",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "author": {
     "email": "simonegauli@gmail.com",
     "name": "Simone Gauli"
