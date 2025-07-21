@@ -5,7 +5,7 @@ const protocolSchema = z.literal(['http', 'https', 'socks4', 'socks5']);
 const proxySchema = z.strictObject({
   _id: z.string(),
   ip: z.ipv4(),
-  anonymityLevel: z.literal(['elite', 'transparent']),
+  anonymityLevel: z.literal(['elite', 'transparent', 'anonymous']),
   asn: z.string().nullable(),
   city: z.string(),
   country: z.string(),
