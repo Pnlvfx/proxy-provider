@@ -4,3 +4,4 @@ dist
 coverage
 .test
 .yarn
+.env.yarn

@@ -1,8 +1,8 @@
 import type { Proxy } from './geonode/types.js';
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import { storage } from '@goatjs/storage';
-import { clearFolder, pathExist } from '@goatjs/node/fs';
+import { storage } from '@goatjs/storage/storage';
+import { fsExtra } from '@goatjs/node/fs-extra/index';
 import { getProxyList, type ProxyListParams } from './proxy.js';
 import { makeProto } from './helpers.js';
 
@@ -26,9 +26,9 @@ export const proxyProvider = async ({ country, protocols }: ProviderOptions = {}
   const skips = await getSkips();
 
   const addToSkip = async (ip: string) => {
-    if (await pathExist(proxyFile)) {
+    try {
       await fs.rm(proxyFile);
-    }
+    } catch {}
     if (!skips.includes(ip)) {
       skips.push(ip);
       await fs.writeFile(skipFile, JSON.stringify(skips));
@@ -63,7 +63,7 @@ export const proxyProvider = async ({ country, protocols }: ProviderOptions = {}
   };
 
   const reset = () => {
-    return clearFolder(directory);
+    return fsExtra.clearFolder(directory);
   };
 
   return {

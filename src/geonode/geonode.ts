@@ -5,9 +5,9 @@ interface ProxyOptions {
   page?: number;
   sort_by?: 'lastChecked';
   sort_type?: 'desc';
-  protocols?: Protocol; // TODO not sure if i can use the join with comma, docs are not clear.
+  protocols?: Protocol; // TODO [2025-09-30] not sure if i can use the join with comma, docs are not clear.
   /** Two letter country, eg: US */
-  country?: string; // TODO not sure if i can use the join with comma, docs are not clear.
+  country?: string; // TODO [2025-09-30] not sure if i can use the join with comma, docs are not clear.
 }
 
 const BASE_URL = 'https://proxylist.geonode.com/api/proxy-list';
