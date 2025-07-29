@@ -1,5 +1,5 @@
 {
-  "name": "proxy-provider",
+  "name": "@goatjs/proxy-provider",
   "description": "Free proxy api.",
   "version": "1.0.8",
   "author": {

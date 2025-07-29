@@ -360,6 +360,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@goatjs/proxy-provider@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@goatjs/proxy-provider@workspace:."
+  dependencies:
+    "@goatjs/core": "npm:^1.1.0"
+    "@goatjs/dbz": "npm:^1.1.0"
+    "@goatjs/node": "npm:^1.1.0"
+    "@goatjs/node-eslint": "npm:^1.0.18"
+    "@goatjs/rimraf": "npm:^1.1.0"
+    "@goatjs/storage": "npm:^1.1.0"
+    "@goatjs/ts-unused-exports": "npm:^1.1.0"
+    "@goatjs/typescript-config": "npm:^1.1.0"
+    "@types/node": "npm:^24.1.0"
+    eslint: "npm:^9.32.0"
+    husky: "npm:^9.1.7"
+    prettier: "npm:^3.6.2"
+    tsx: "npm:^4.20.3"
+    typescript: "npm:^5.8.3"
+    undici: "npm:^7.12.0"
+    zod: "npm:^4.0.13"
+  peerDependencies:
+    "@goatjs/core": "*"
+    "@goatjs/node": "*"
+    "@goatjs/storage": "*"
+    undici: "*"
+    zod: "*"
+  languageName: unknown
+  linkType: soft
+
 "@goatjs/rimraf@npm:^1.1.0":
   version: 1.1.0
   resolution: "@goatjs/rimraf@npm:1.1.0::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Frimraf%2F-%2F%40goatjs%2Frimraf-1.1.0.tgz"
@@ -2886,35 +2915,6 @@ __metadata:
   checksum: 10c0/9c7045a1a2928094b5b9b15336dcd2a7b1c052f674550df63cc3f36cd44028e5080448175b6f6ca32b642de81150f5e7b1a98b728f15cb069f2dd60ac2616b96
   languageName: node
   linkType: hard
-
-"proxy-provider@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "proxy-provider@workspace:."
-  dependencies:
-    "@goatjs/core": "npm:^1.1.0"
-    "@goatjs/dbz": "npm:^1.1.0"
-    "@goatjs/node": "npm:^1.1.0"
-    "@goatjs/node-eslint": "npm:^1.0.18"
-    "@goatjs/rimraf": "npm:^1.1.0"
-    "@goatjs/storage": "npm:^1.1.0"
-    "@goatjs/ts-unused-exports": "npm:^1.1.0"
-    "@goatjs/typescript-config": "npm:^1.1.0"
-    "@types/node": "npm:^24.1.0"
-    eslint: "npm:^9.32.0"
-    husky: "npm:^9.1.7"
-    prettier: "npm:^3.6.2"
-    tsx: "npm:^4.20.3"
-    typescript: "npm:^5.8.3"
-    undici: "npm:^7.12.0"
-    zod: "npm:^4.0.13"
-  peerDependencies:
-    "@goatjs/core": "*"
-    "@goatjs/node": "*"
-    "@goatjs/storage": "*"
-    undici: "*"
-    zod: "*"
-  languageName: unknown
-  linkType: soft
 
 "punycode@npm:^2.1.0":
   version: 2.3.1
