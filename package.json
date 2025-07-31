@@ -43,12 +43,10 @@
     "README.md"
   ],
   "devDependencies": {
-    "@goatjs/core": "^1.1.0",
     "@goatjs/dbz": "^1.1.0",
     "@goatjs/node": "^1.1.0",
     "@goatjs/node-eslint": "^1.0.21",
     "@goatjs/rimraf": "^1.1.0",
-    "@goatjs/storage": "^1.1.0",
     "@goatjs/ts-unused-exports": "^1.1.0",
     "@goatjs/typescript-config": "^1.1.0",
     "@types/node": "^24.1.0",
@@ -61,9 +59,6 @@
     "zod": "^4.0.14"
   },
   "peerDependencies": {
-    "@goatjs/core": "*",
-    "@goatjs/node": "*",
-    "@goatjs/storage": "*",
     "undici": "*",
     "zod": "*"
   },

@@ -2,12 +2,11 @@ import { ProxyAgent } from 'undici';
 import { proxyProvider, type ProviderOptions } from '../provider.js';
 
 // experimental helper to help switching undici agents
-export const createProxyAgent = async (options: Omit<ProviderOptions, 'protocols'> = {}) => {
-  const provider = await proxyProvider({ ...options, protocols: 'http' });
+export const createProxyAgent = (options: Omit<ProviderOptions, 'protocols'> = {}) => {
+  const provider = proxyProvider({ ...options, protocols: 'http' });
   let agent: ProxyAgent | undefined;
 
   return {
-    reset: provider.reset,
     getCurrentAgent: async () => {
       if (agent) return agent;
       const proxy = await provider.getCurrentProxy();

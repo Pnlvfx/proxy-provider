@@ -1,6 +1,6 @@
 import { proxyResponse, type Protocol } from './types.js';
 
-interface ProxyOptions {
+export interface ProxyOptions {
   limit?: number;
   page?: number;
   sort_by?: 'lastChecked';

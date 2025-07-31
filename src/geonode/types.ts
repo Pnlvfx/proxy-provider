@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as z from 'zod';
 
 const protocolSchema = z.literal(['http', 'https', 'socks4', 'socks5']);
 

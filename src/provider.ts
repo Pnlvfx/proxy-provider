@@ -1,73 +1,33 @@
 import type { Proxy } from './geonode/types.js';
-import path from 'node:path';
-import fs from 'node:fs/promises';
-import { storage } from '@goatjs/storage/storage';
-import { fsExtra } from '@goatjs/node/fs-extra/index';
-import { getProxyList, type ProxyListParams } from './proxy.js';
 import { makeProto } from './helpers.js';
+import { geonode, type ProxyOptions } from './geonode/geonode.js';
 
-export type ProviderOptions = ProxyListParams;
+export type ProviderOptions = ProxyOptions;
 
-export const proxyProvider = async ({ country, protocols }: ProviderOptions = {}) => {
-  const directory = await storage.use('.proxy');
-  const proxyFile = path.join(directory, 'proxy.json');
-  const skipFile = path.join(directory, 'skip.json');
-  let currentProxy: Proxy | undefined;
+const LIMIT = 500;
 
-  const getSkips = async () => {
-    try {
-      const buf = await fs.readFile(skipFile);
-      return JSON.parse(buf.toString()) as string[];
-    } catch {
-      return [];
-    }
-  };
-
-  const skips = await getSkips();
-
-  const addToSkip = async (ip: string) => {
-    try {
-      await fs.rm(proxyFile);
-    } catch {}
-    if (!skips.includes(ip)) {
-      skips.push(ip);
-      await fs.writeFile(skipFile, JSON.stringify(skips));
-    }
-  };
-
-  const getStoredProxy = async () => {
-    try {
-      const buf = await fs.readFile(proxyFile);
-      return JSON.parse(buf.toString()) as Proxy;
-    } catch {
-      return;
-    }
-  };
+export const proxyProvider = ({ country, protocols }: ProviderOptions = {}) => {
+  const proxyList: Proxy[] = [];
+  let currentProxy = 0;
+  let currentPage = 0;
 
   const getNextProxy = async () => {
-    if (currentProxy) {
-      await addToSkip(currentProxy.ip);
+    if (proxyList.length === currentProxy) {
+      currentPage += 1;
+      proxyList.push(...(await geonode.getProxyList({ country, protocols, limit: LIMIT, page: currentPage })));
     }
-    let proxies = await getProxyList({ country, protocols });
-    proxies = proxies.filter((p) => !skips.includes(p.ip));
-    currentProxy = proxies.at(0);
-    if (!currentProxy) throw new Error('No more available proxies.');
-    await fs.writeFile(proxyFile, JSON.stringify(currentProxy));
-    return currentProxy;
+    currentProxy += 1;
+    const proxy = proxyList.at(currentProxy);
+    if (!proxy) throw new Error('No more available proxies.');
+    return proxy;
   };
 
   const getCurrentProxy = async () => {
-    if (currentProxy) return currentProxy;
-    currentProxy = (await getStoredProxy()) ?? (await getNextProxy());
-    return currentProxy;
-  };
-
-  const reset = () => {
-    return fsExtra.clearFolder(directory);
+    const proxy = proxyList.at(currentProxy);
+    return proxy ?? getNextProxy();
   };
 
   return {
-    reset,
     /** Get a single free proxy, the proxy will be stored to the disk, If the proxy is no more valid, you can use provider.getNextProxy to remove it and get a new one. */
     getCurrentProxy: async () => {
       const proxy = await getCurrentProxy();
