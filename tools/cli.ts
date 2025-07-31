@@ -8,9 +8,8 @@ import { setTimeout } from 'node:timers/promises';
 
 const run = async () => {
   try {
-    const text = await input.create({ title: '1. getProxy\n2. getProxyList' });
+    const text = await input.create({ title: '1. getProxy\n2. getProxyList\n3. reset' });
     const provider = await proxyProvider({ protocols: 'http' });
-    await provider.reset();
     switch (text) {
       case '1': {
         const proxy = await provider.getCurrentProxy();
@@ -36,6 +35,10 @@ const run = async () => {
       case '2': {
         const proxies = await geonode.getProxyList();
         console.log(proxies);
+        break;
+      }
+      case '3': {
+        await provider.reset();
         break;
       }
       default: {

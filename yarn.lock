@@ -260,17 +260,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:9.32.0":
+"@eslint/js@npm:9.32.0, @eslint/js@npm:^9.32.0":
   version: 9.32.0
   resolution: "@eslint/js@npm:9.32.0"
   checksum: 10c0/f71e8f9146638d11fb15238279feff98801120a4d4130f1c587c4f09b024ff5ec01af1ba88e97ba6b7013488868898a668f77091300cc3d4394c7a8ed32d2667
-  languageName: node
-  linkType: hard
-
-"@eslint/js@npm:^9.31.0":
-  version: 9.31.0
-  resolution: "@eslint/js@npm:9.31.0"
-  checksum: 10c0/f9d4c73d0fafe70679a418cbb25ab7ebcc8f1dba6c32456d6f8ba5a137d583ecff233cfe10f61f41d7d4d2220e94cff1f39fc7ed1fa3819d1888dee1cad678ea
   languageName: node
   linkType: hard
 
@@ -301,11 +294,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@goatjs/core-eslint@npm:1.0.18":
-  version: 1.0.18
-  resolution: "@goatjs/core-eslint@npm:1.0.18::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Fcore-eslint%2F-%2F%40goatjs%2Fcore-eslint-1.0.18.tgz"
+"@goatjs/core-eslint@npm:1.0.21":
+  version: 1.0.21
+  resolution: "@goatjs/core-eslint@npm:1.0.21::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Fcore-eslint%2F-%2F%40goatjs%2Fcore-eslint-1.0.21.tgz"
   dependencies:
-    "@eslint/js": "npm:^9.31.0"
+    "@eslint/js": "npm:^9.32.0"
+    eslint-plugin-import-zod: "npm:^1.2.0"
     eslint-plugin-sonarjs: "npm:^3.0.4"
     eslint-plugin-unicorn: "npm:^60.0.0"
     typescript-eslint: "npm:^8.38.0"
@@ -313,7 +307,7 @@ __metadata:
     eslint: "*"
     globals: "*"
     typescript-eslint: "*"
-  checksum: 10c0/3f6b4b4b6061d73681d12b8466356403918711a65278c13657bad01a1743837431fdc1e2e53a0377b08ca708c1b25ba0725ee7a4c16dd92ac1301119cc63cb81
+  checksum: 10c0/e6059322d31c740086e2b2dd4c120175ebd3712cd58cb55c8bb1207f9d7ba2e0208b40014e6674de162cab357bec056e4ae0262a034d03b4ae44cacb5e4cbbdf
   languageName: node
   linkType: hard
 
@@ -336,13 +330,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@goatjs/node-eslint@npm:^1.0.18":
-  version: 1.0.18
-  resolution: "@goatjs/node-eslint@npm:1.0.18::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Fnode-eslint%2F-%2F%40goatjs%2Fnode-eslint-1.0.18.tgz"
+"@goatjs/node-eslint@npm:^1.0.21":
+  version: 1.0.21
+  resolution: "@goatjs/node-eslint@npm:1.0.21::__archiveUrl=https%3A%2F%2Feurope-west8-npm.pkg.dev%2Fopen-gto-2%2Fgoat%2F%40goatjs%2Fnode-eslint%2F-%2F%40goatjs%2Fnode-eslint-1.0.21.tgz"
   dependencies:
-    "@goatjs/core-eslint": "npm:1.0.18"
+    "@goatjs/core-eslint": "npm:1.0.21"
     typescript-eslint: "npm:^8.38.0"
-  checksum: 10c0/f3def0e86459ae36001de288a4facfbb677f4ee3b74eb90e46ab1620e45ecbdf31bd36a1ac623d874e44c061e98f15c6d125259b0dc7096c165ff3ad8712e0ab
+  checksum: 10c0/ce398924dd9c51943f3ac84be1cb7f1ca11bbafa9e968645d209a75b73beb66c03c4c97f57944ebfe52bea665448967fe83946e6a0d429e58dbf52e585fca084
   languageName: node
   linkType: hard
 
@@ -367,7 +361,7 @@ __metadata:
     "@goatjs/core": "npm:^1.1.0"
     "@goatjs/dbz": "npm:^1.1.0"
     "@goatjs/node": "npm:^1.1.0"
-    "@goatjs/node-eslint": "npm:^1.0.18"
+    "@goatjs/node-eslint": "npm:^1.0.21"
     "@goatjs/rimraf": "npm:^1.1.0"
     "@goatjs/storage": "npm:^1.1.0"
     "@goatjs/ts-unused-exports": "npm:^1.1.0"
@@ -377,9 +371,9 @@ __metadata:
     husky: "npm:^9.1.7"
     prettier: "npm:^3.6.2"
     tsx: "npm:^4.20.3"
-    typescript: "npm:^5.8.3"
-    undici: "npm:^7.12.0"
-    zod: "npm:^4.0.13"
+    typescript: "npm:^5.9.2"
+    undici: "npm:^7.13.0"
+    zod: "npm:^4.0.14"
   peerDependencies:
     "@goatjs/core": "*"
     "@goatjs/node": "*"
@@ -1441,6 +1435,16 @@ __metadata:
   version: 4.0.0
   resolution: "escape-string-regexp@npm:4.0.0"
   checksum: 10c0/9497d4dd307d845bd7f75180d8188bb17ea8c151c1edbf6b6717c100e104d629dc2dfb687686181b0f4b7d732c7dfdc4d5e7a8ff72de1b0ca283a75bbb3a9cd9
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-import-zod@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "eslint-plugin-import-zod@npm:1.2.0"
+  peerDependencies:
+    "@typescript-eslint/utils": ^8.35.1
+    eslint: ">=9"
+  checksum: 10c0/c03f3059c4e55fa50ad43da6db989bb4c51c6466ab17bd7ec7d096421d060a20488ee1ef0df80fa61706ad0b6a4534622540ceab0638d3b6887df7d810ef1d22
   languageName: node
   linkType: hard
 
@@ -3550,7 +3554,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:>=5, typescript@npm:^5.8.3":
+"typescript@npm:>=5":
   version: 5.8.3
   resolution: "typescript@npm:5.8.3"
   bin:
@@ -3560,13 +3564,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A>=5#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.8.3#optional!builtin<compat/typescript>":
+"typescript@npm:^5.9.2":
+  version: 5.9.2
+  resolution: "typescript@npm:5.9.2"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/cd635d50f02d6cf98ed42de2f76289701c1ec587a363369255f01ed15aaf22be0813226bff3c53e99d971f9b540e0b3cc7583dbe05faded49b1b0bed2f638a18
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@npm%3A>=5#optional!builtin<compat/typescript>":
   version: 5.8.3
   resolution: "typescript@patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>::version=5.8.3&hash=5786d5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10c0/39117e346ff8ebd87ae1510b3a77d5d92dae5a89bde588c747d25da5c146603a99c8ee588c7ef80faaf123d89ed46f6dbd918d534d641083177d5fac38b8a1cb
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@npm%3A^5.9.2#optional!builtin<compat/typescript>":
+  version: 5.9.2
+  resolution: "typescript@patch:typescript@npm%3A5.9.2#optional!builtin<compat/typescript>::version=5.9.2&hash=5786d5"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/34d2a8e23eb8e0d1875072064d5e1d9c102e0bdce56a10a25c0b917b8aa9001a9cf5c225df12497e99da107dc379360bc138163c66b55b95f5b105b50578067e
   languageName: node
   linkType: hard
 
@@ -3589,10 +3613,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^7.12.0":
-  version: 7.12.0
-  resolution: "undici@npm:7.12.0"
-  checksum: 10c0/27aada7bd8d2588f146a2ba554f2f6b7593f9c2d14bf3797bbc7b74825d9bee38eb3ab61e2d0ee01bb827a9ac8017eb2991cb4f06d9ed9971c8a142d8306fbab
+"undici@npm:^7.13.0":
+  version: 7.13.0
+  resolution: "undici@npm:7.13.0"
+  checksum: 10c0/8865d40b141f073215a6763aad5d1b2f4bd4e252600e93e68055d6c5d23a8a0e5782669236b2ecfa4d415d1d969d9c4623ff1c0386d32fa60088a19ffa58c611
   languageName: node
   linkType: hard
 
@@ -3777,9 +3801,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^4.0.13":
-  version: 4.0.13
-  resolution: "zod@npm:4.0.13"
-  checksum: 10c0/e0e3dd3680bcf21fd550ee9777b39ef3c2e06376aab73e713afe82938f5f00c319ca1df20c66480789168bfce4251dc9f7e6aa80021de42857cc6384042b7413
+"zod@npm:^4.0.14":
+  version: 4.0.14
+  resolution: "zod@npm:4.0.14"
+  checksum: 10c0/ec8681050d393f3be1c2c8f30d7dd4f56bec3746855fb17288be856185a0fe65e68d1b24aec657bbf956f64c05e69332d3751eafd6c103d19385bcc46075612b
   languageName: node
   linkType: hard
