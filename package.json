@@ -1,7 +1,7 @@
 {
   "name": "@goatjs/proxy-provider",
   "description": "Free proxy api.",
-  "version": "1.0.10",
+  "version": "1.1.0",
   "author": {
     "email": "simonegauli@gmail.com",
     "name": "Simone Gauli"
