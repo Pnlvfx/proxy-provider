@@ -12,7 +12,7 @@ export const proxyProvider = ({ country, protocols }: ProviderOptions = {}) => {
   let currentPage = 0;
 
   const getNextProxy = async () => {
-    if (proxyList.length === currentProxy) {
+    if (currentProxy === proxyList.length - 1) {
       currentPage += 1;
       proxyList.push(...(await geonode.getProxyList({ country, protocols, limit: LIMIT, page: currentPage })));
     }
